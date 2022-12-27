@@ -24,8 +24,8 @@ func (h *ArticleHandler) GetArticlesList(ctx *gin.Context) {
 	// TODO
 }
 
-// AddArticles 新增文章
-func (h *ArticleHandler) AddArticles(ctx *gin.Context) {
+// CreateArticles 新增文章
+func (h *ArticleHandler) CreateArticles(ctx *gin.Context) {
 	// TODO
 }
 
