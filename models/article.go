@@ -13,7 +13,7 @@ type Articles struct {
 	ArticleBanner string             `bson:"article_banner" json:"article_banner"` // 头图
 	Context       string             `bson:"context" json:"context"`               // 文章正文内容
 	CreateAt      time.Time          `bson:"create_at" json:"create_at"`           // 创建时间
-	UpdateAt      time.Time          `bson:"updateAt" json:"update_at"`            // 修改时间
+	UpdateAt      time.Time          `bson:"update_at" json:"update_at"`           // 修改时间
 }
 
 // SaveArticle 保存文章 (考虑到新增测试数据方法，支持批量新增)
