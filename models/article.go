@@ -4,6 +4,7 @@ import (
 	"context"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"time"
 )
 
 type Articles struct {
@@ -11,6 +12,8 @@ type Articles struct {
 	Title         string             `bson:"title" json:"title"`                   // 文章标题
 	ArticleBanner string             `bson:"article_banner" json:"article_banner"` // 头图
 	Context       string             `bson:"context" json:"context"`               // 文章正文内容
+	CreateAt      time.Time          `bson:"create_at" json:"create_at"`           // 创建时间
+	UpdateAt      time.Time          `bson:"updateAt" json:"update_at"`            // 修改时间
 }
 
 // SaveArticle 保存文章 (考虑到新增测试数据方法，支持批量新增)
