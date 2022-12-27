@@ -1,6 +1,10 @@
 package config
 
-import "github.com/qiniu/qmgo"
+import (
+	"github.com/qiniu/qmgo"
+	yaml "gopkg.in/yaml.v2"
+	"io/ioutil"
+)
 
 // Config 配置定义
 type Config struct {
@@ -18,4 +22,20 @@ type RedisConfig struct {
 	Size       int      `yaml:"size"`
 	Networt    string   `yaml:"network"`
 	KeyPairs   string   `yaml:"key_pairs"`
+}
+
+// LoadConfig 加载配置文件
+func LoadConfig(yamlPath string) (*Config, error) {
+	bytes, err := ioutil.ReadFile(yamlPath)
+	if err != nil {
+		return nil, err
+	}
+
+	conf := &Config{}
+	err = yaml.UnmarshalStrict(bytes, conf)
+	if err != nil {
+		return nil, err
+	}
+
+	return conf, nil
 }
