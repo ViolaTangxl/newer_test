@@ -39,3 +39,12 @@ POST localhost:11009/articles
 ![](img/1.png)
 ![](img/2.png)
 
+#### 小数据量新建文章
+PUT localhost:11009/articles
+* 没有带`id`字段
+![](img/3.png)
+![](img/4.png)
+
+* 正确修改
+![](img/5.png)
+![](img/6.png)
