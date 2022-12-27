@@ -55,18 +55,18 @@ func (d *ArticleMgr) UpdateArticle(ctx context.Context, id primitive.ObjectID, m
 	return nil
 }
 
-// ArticlesListCron
+// ArticlesListCron 文章列表查询参数
 type ArticlesListCron struct {
-	Id    string
-	Title string
+	Id       string `form:"id"`
+	Title    string `form:"title"`
+	Page     uint64 `form:"page"`
+	PageSize uint64 `form:"page_size"`
 }
 
 // GetArticlesList 根据条件分页查询文章列表
 func (d *ArticleMgr) GetArticlesList(
 	ctx context.Context,
 	param ArticlesListCron,
-	page uint,
-	pageSize uint,
 ) ([]Articles, uint64, error) {
 	result := make([]Articles, 0)
 	query := bson.M{}
@@ -80,7 +80,7 @@ func (d *ArticleMgr) GetArticlesList(
 		}
 	}
 
-	err := d.mgr.Find(ctx, query).Skip(int64(page)).Limit(int64(pageSize)).All(&result)
+	err := d.mgr.Find(ctx, query).Skip(int64(param.Page)).Limit(int64(param.PageSize)).All(&result)
 	if err != nil {
 		return nil, 0, err
 	}
