@@ -38,6 +38,7 @@ func (d *ArticleMgr) UpdateArticle(ctx context.Context, id primitive.ObjectID, m
 			"title":          model.Title,
 			"article_banner": model.ArticleBanner,
 			"context":        model.Context,
+			"update_at":      model.UpdateAt,
 		}})
 	if err != nil {
 		return err
