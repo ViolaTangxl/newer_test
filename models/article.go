@@ -26,11 +26,20 @@ func (d *ArticleMgr) SaveArticle(ctx context.Context, models []Articles) error {
 	return nil
 }
 
+// UpdateArticleParam 文章更新参数
+type UpdateArticleParam struct {
+	Id            string    `json:"id"`
+	Title         string    `json:"title"`          // 文章标题
+	ArticleBanner string    `json:"article_banner"` // 头图
+	Context       string    `json:"context"`        // 文章正文内容
+	UpdateAt      time.Time `json:"update_at"`
+}
+
 // UpdateArticle 修改文章
 // TODO
 // 考虑文章正文如果内容较大且假设没有修改的情况，现在的操作比较浪费资源，可以讲正文内容hash以后存储hash string，每次修改对比原有hash
 // 和新hash string是否一致，如果不一致则再修改正文
-func (d *ArticleMgr) UpdateArticle(ctx context.Context, id primitive.ObjectID, model Articles) error {
+func (d *ArticleMgr) UpdateArticle(ctx context.Context, id primitive.ObjectID, model UpdateArticleParam) error {
 	err := d.mgr.UpdateOne(
 		ctx,
 		bson.M{"_id": id},

@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/ViolaTangxl/newer_test/models"
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"net/http"
 	"time"
@@ -59,5 +60,39 @@ func (h *ArticleHandler) CreateArticles(ctx *gin.Context) {
 
 // UpdateArticles 文章编辑
 func (h *ArticleHandler) UpdateArticles(ctx *gin.Context) {
-	// TODO
+	var article models.UpdateArticleParam
+	if err := ctx.ShouldBindJSON(&article); err != nil {
+		// TODO 抽取公用的返回体包装
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"err": err.Error(),
+		})
+		return
+	}
+
+	// 如果id字段不存在，则报错
+	if article.Id == "" {
+		logrus.Error("invalid article id")
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"err": "invalid article id",
+		})
+	}
+
+	id, err := primitive.ObjectIDFromHex(article.Id)
+	if err != nil {
+		logrus.Error("invalid article id")
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"err": "invalid article id",
+		})
+	}
+
+	article.UpdateAt = time.Now()
+	err = h.mgr.UpdateArticle(context.Background(), id, article)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"err": err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, nil)
 }
