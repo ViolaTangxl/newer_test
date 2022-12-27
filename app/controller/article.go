@@ -25,7 +25,38 @@ func NewArticleHandler(ctx context.Context, mgr *models.ArticleMgr) *ArticleHand
 
 // GetArticlesList 获取文章列表
 func (h *ArticleHandler) GetArticlesList(ctx *gin.Context) {
-	// TODO
+	var param models.ArticlesListCron
+	if err := ctx.ShouldBind(&param); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"err": err.Error(),
+		})
+		return
+	}
+	if param.Page == 0 {
+		param.Page = 1
+	}
+	if param.PageSize == 0 {
+		// TODO 这里写死的默认10条
+		param.PageSize = uint64(10)
+	}
+
+	param.Page = param.PageSize * (param.Page - 1)
+
+	list, count, err := h.mgr.GetArticlesList(context.Background(), param)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"err": err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, struct {
+		Artiles []models.Articles
+		Count   uint64
+	}{
+		Artiles: list,
+		Count:   count,
+	})
 }
 
 // CreateArticles 新增文章
