@@ -33,7 +33,7 @@ func main() {
 	env.InitRouters(app)
 
 	// TODO 抽取配置文件
-	err = app.Run("11009")
+	err = app.Run(":11009")
 	if err != nil {
 		logger.WithError(err).Fatal("service run failed")
 	}
