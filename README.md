@@ -48,3 +48,11 @@ PUT localhost:11009/articles
 * 正确修改
 ![](img/5.png)
 ![](img/6.png)
+
+#### 小数据量分页查询文章
+GET localhost:11009/articles/list
+* 全部查询，默认10条
+  ![](img/7.png)
+
+* 标题模糊查询
+  ![](img/8.png)
