@@ -1,0 +1,13 @@
+
+redis_config:
+  db: 0
+  failover: false
+  password: ""
+  addrs:
+    - "127.0.0.1:6379"
+  size: 10
+  network: "tcp"
+  key_pairs: ""
+mongo_config:
+  uri: "mongodb://127.0.0.1:27017"
+  database: "test"
