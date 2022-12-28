@@ -56,3 +56,8 @@ GET localhost:11009/articles/list
 
 * 标题模糊查询
   ![](img/8.png)
+
+
+#### 批量插入1000W数据单测
+![](img/9.png)
+![](img/10.png)
