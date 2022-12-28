@@ -2,9 +2,11 @@ package models
 
 import (
 	"context"
+	"time"
+
+	"github.com/ViolaTangxl/newer_test/models/enums"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"time"
 )
 
 type Articles struct {
@@ -57,10 +59,12 @@ func (d *ArticleMgr) UpdateArticle(ctx context.Context, id primitive.ObjectID, m
 
 // ArticlesListCron 文章列表查询参数
 type ArticlesListCron struct {
-	Id       string `form:"id"`
-	Title    string `form:"title"`
-	Page     uint64 `form:"page"`
-	PageSize uint64 `form:"page_size"`
+	Id        string                 `form:"id"`
+	Title     string                 `form:"title"`
+	Page      uint64                 `form:"page"`
+	PageSize  uint64                 `form:"page_size"`
+	FieldSort enums.ArticleFieldSort `form:"field_sort"`
+	SortOrder enums.SortOrder        `form:"sort_order"`
 }
 
 // GetArticlesList 根据条件分页查询文章列表
@@ -68,8 +72,12 @@ func (d *ArticleMgr) GetArticlesList(
 	ctx context.Context,
 	param ArticlesListCron,
 ) ([]Articles, uint64, error) {
-	result := make([]Articles, 0)
-	query := bson.M{}
+
+	var (
+		result = make([]Articles, 0)
+		query  = bson.M{}
+		err    error
+	)
 	if param.Id != "" {
 		query["_id"], _ = primitive.ObjectIDFromHex(param.Id)
 	}
@@ -79,8 +87,15 @@ func (d *ArticleMgr) GetArticlesList(
 			Options: "i",
 		}
 	}
-
-	err := d.mgr.Find(ctx, query).Skip(int64(param.Page)).Limit(int64(param.PageSize)).All(&result)
+	if param.FieldSort != enums.ArticleFieldSortUnknown && param.SortOrder != enums.SortOrderUnknown {
+		err = d.mgr.Find(ctx, query).
+			Sort(enums.ToSortBson(param.FieldSort, param.SortOrder)).
+			Skip(int64(param.Page)).
+			Limit(int64(param.PageSize)).
+			All(&result)
+	} else {
+		err = d.mgr.Find(ctx, query).Skip(int64(param.Page)).Limit(int64(param.PageSize)).All(&result)
+	}
 	if err != nil {
 		return nil, 0, err
 	}
