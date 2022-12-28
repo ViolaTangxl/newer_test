@@ -70,4 +70,8 @@ GET localhost:11009/articles/list
 
 #### 增加缓存后分页接口查询时间
 对比上图可发现，增加缓存后，接口单次查询时间由2992ms变为9ms
-![](img/11.png)
+![](img/12.png)
+
+#### 压测
+压测使用的工具是 https://github.com/link1st/go-stress-testingccc
+![](img/13.png)
