@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+
 	"github.com/ViolaTangxl/newer_test/config"
 	"github.com/ViolaTangxl/newer_test/env"
 	"github.com/sirupsen/logrus"
@@ -25,6 +26,7 @@ func main() {
 	env.Global.Cfg = conf
 	env.Global.Logger = logger
 	env.Global.ArticleMgr = env.InitMongo(ctx, logger, conf)
+	env.Global.RedisStore = env.InitRedisStore(conf)
 
 	// 初始化项目配置
 	app := env.InitApp(logger, conf)

@@ -2,7 +2,10 @@ package env
 
 import (
 	"context"
+	"time"
+
 	"github.com/ViolaTangxl/newer_test/app/controller"
+	cache "github.com/chenyahui/gin-cache"
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,7 +15,10 @@ func InitRouters(app *gin.Engine) {
 
 	article := app.Group("/articles")
 	{
-		article.GET("/list", articleHandler.GetArticlesList)
+		article.GET("/list",
+			cache.CacheByRequestURI(Global.RedisStore, 5*time.Minute),
+			articleHandler.GetArticlesList,
+		)
 		article.POST("", articleHandler.CreateArticles)
 		article.PUT("", articleHandler.UpdateArticles)
 	}

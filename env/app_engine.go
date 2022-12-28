@@ -2,8 +2,12 @@ package env
 
 import (
 	"context"
+
+	"github.com/go-redis/redis/v8"
+
 	"github.com/ViolaTangxl/newer_test/config"
 	"github.com/ViolaTangxl/newer_test/models"
+	persist "github.com/chenyahui/gin-cache/persist"
 	"github.com/gin-gonic/gin"
 	"github.com/qiniu/qmgo"
 	"github.com/sirupsen/logrus"
@@ -16,6 +20,7 @@ type GlobalEnv struct {
 	Cfg        *config.Config
 	Logger     *logrus.Logger
 	ArticleMgr *models.ArticleMgr
+	RedisStore *persist.RedisStore
 }
 
 // InitMongo 初始化 mongo
@@ -39,4 +44,15 @@ func InitApp(log *logrus.Logger, cfg *config.Config) *gin.Engine {
 	// TODO 其他前置操作
 
 	return app
+}
+
+// InitRedisStore 初始化redis store
+func InitRedisStore(cfg *config.Config) *persist.RedisStore {
+	redisStore := persist.NewRedisStore(redis.NewClient(&redis.Options{
+		Network: cfg.RedisConfig.Networt,
+		// 单机模式就写死第一个address
+		Addr: cfg.RedisConfig.Addrs[0],
+	}))
+
+	return redisStore
 }
